@@ -7,7 +7,7 @@ const RootNavigator = () => {
   const isSignedIn =true;
   const Stack = createNativeStackNavigator();
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{headerShown:false}}>
       {
         isSignedIn?(
           <Stack.Screen name="Main" component={AppNavigator}/>
