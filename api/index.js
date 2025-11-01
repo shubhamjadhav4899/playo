@@ -1,27 +1,24 @@
-
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-const core = require("cors");
-const http = require("http");
+const cors = require("cors");
 
 const app = express();
 const port = process.env.PORT || 3001;
 
-app.use(core());
+app.use(cors());
 app.use(express.json());
 
+mongoose.set("strictQuery", true);
+console.log("MONGO_URI value:", process.env.MONGO_URI); // 👈 Debug line
 mongoose
-  .connect(
-    "mongodb+srv://shubhamjadhav4899_db_user:VIqNmZRhKMYEO5rg@cluster0.z8gvnt8.mongodb.net/"
-  )
-  .then(() => {
-    console.log("Connected to MongoDB");
-  })
-  .catch((err) => {
-    console.log("Error connecting to MongoDB", err);
-  });
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ Connected to MongoDB Atlas"))
+  .catch((err) => console.error("❌ Error connecting to MongoDB:", err));
 
+const userRoutes = require("./routes/user.route");
+app.use("/api/users", userRoutes);
 
-  app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-  });
+app.listen(port, () => {
+  console.log(`🚀 Server is running on http://localhost:${port}`);
+});

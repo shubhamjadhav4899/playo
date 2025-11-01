@@ -84,23 +84,25 @@ const StartScreen = () => {
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-        style={{ width: "100%", height: 400 }}
+        style={{ width: "100%", height: 350 }}
       >
         {circularPoints?.map((point, index) => {
           const user = users[index % users.length];
           return (
             <Marker key={index} coordinate={point}>
-              <View className=" w-[40px] h-[40x] items-center justify-center">
+              <View className="h-[100px]">
                 <Image
                   source={{ uri: user?.image }}
-                  className=" w-[45px] h-[45px] rounded-full"
+                  className=" w-[60px] h-[60px] rounded-full"
                   resizeMode="cover"
                 />
                 
-              </View>
-              <View className="bg-white p-2 rounded-lg shadow-lg -mt-3">
+              
+                <View className="bg-white p-2 rounded-lg shadow-lg mt-2">
                 <Text className="text-xs">{user?.description}</Text>
               </View>
+              </View>
+             
             </Marker>
           );
         })}

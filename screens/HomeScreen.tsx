@@ -11,7 +11,17 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Bell, MessageCircle, Spotlight } from "lucide-react-native";
+import { useClerk } from "@clerk/clerk-expo";
 const HomeScreen = () => {
+  const {signOut} = useClerk();
+  const handleSignout = async()=>{
+    try {
+       await signOut();
+    } catch (error:any) {
+      console.log("signOut error :",error);
+      
+    }
+  }
   const spotlightData = [
     {
       id: "10",
@@ -56,7 +66,7 @@ const HomeScreen = () => {
         <View className="flex-row gap-4 items-center ml-2">
           <MessageCircle size={20} stroke="#333" />
           <Bell size={20} stroke="#333" />
-          <Pressable>
+          <Pressable onPress={handleSignout}>
             <Image
               className="w-8 h-8 rounded-full"
               source={{

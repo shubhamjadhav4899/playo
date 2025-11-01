@@ -10,6 +10,7 @@ import {
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useUserOnboarding } from "../contexts/UserOnBoardingContext";
 
 interface ImageItem {
   id: string;
@@ -17,7 +18,8 @@ interface ImageItem {
 }
 const SelectImageScreen = () => {
   const navigation = useNavigation();
-  const [image, setImage] = useState("");
+  // const [image, setImage] = useState("");
+  const {image,setImage} = useUserOnboarding();
   // Add Images in array
   const images: ImageItem[] = [
     {
@@ -51,6 +53,7 @@ const SelectImageScreen = () => {
         <View className="flex-row flex-wrap justify-center mt-10">
           {images.map((avatar) => (
             <Pressable
+            key={avatar.id}
               onPress={() => setImage(avatar.image)}
               className={`w-20 h-20 m-2 rounded-full overflow-hidden border-2 ${
                 image === avatar.image
@@ -58,7 +61,7 @@ const SelectImageScreen = () => {
                   : "border-transparent"
               } `}
             >
-              <Image key={avatar.id} className="w-full h-full" source={{ uri: avatar.image }} />
+              <Image className="w-full h-full" source={{ uri: avatar.image }} />
             </Pressable>
           ))}
         </View>
@@ -75,8 +78,9 @@ const SelectImageScreen = () => {
           </Text>
         </View>
       </ScrollView>
-      <View className="absolute bottom-6 w-full items-center">
+          <View className="bottom-6 w-full items-center">
         <Pressable
+        onPress={()=>navigation.navigate("GameSelection")}
           className={`w-4/5 h-12 rounded-xl items-center justify-center ${
             image ? "bg-green-600" : "bg-green-300"
           }`}
