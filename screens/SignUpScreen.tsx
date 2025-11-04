@@ -179,7 +179,7 @@ const SignUpScreen = () => {
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity className="mt-4">
+      <TouchableOpacity className="mt-4" onPress={()=>{navigation.navigate("SignIn" as never)}}>
         <Text className="text-sm text-center text-gray-600">
           Already have an account?{" "}
           <Text className="font-semibold text-black">Sign In</Text>

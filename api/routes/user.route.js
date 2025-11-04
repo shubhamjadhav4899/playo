@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 
 const User = require("../models/user");
-// pk_test_bXVzaWNhbC1wYW5kYS0xMC5jbGVyay5hY2NvdW50cy5kZXYk
 router.post("/create-or-update", async (req, res) => {
     console.log("✅ Received POST request");
   console.log("Headers:", req.headers["content-type"]);

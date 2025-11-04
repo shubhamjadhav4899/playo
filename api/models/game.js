@@ -27,5 +27,6 @@ const gameSchema = new mongoose.Schema({
   courtNumber: { type: Number, default: null },
   matchFull: { type: Boolean, default: false },
 });
+const Game = mongoose.models.Game || mongoose.model("Game", gameSchema);
 
-module.exports = mongoose.model("Game", gameSchema);
+module.exports = Game;

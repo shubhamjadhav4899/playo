@@ -8,12 +8,37 @@ import {
   View,
 } from "react-native";
 import React, { useState } from "react";
+import { useSignIn } from "@clerk/clerk-expo";
+import GoogleSignIn from "../components/GoogleSignIn";
 
 const SignInScreen = () => {
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const {setActive,signIn,isLoaded}=useSignIn();
+
+  const onSignInPress= async()=>{
+    if(!isLoaded || loading) return;
+    setLoading(true);
+    try {
+      await signIn.create({identifier:emailAddress,password});
+      if(signIn.status==="complete"){
+        await setActive({session:signIn.createdSessionId});
+      }else{
+        console.error("Sign in not complete");
+      }
+    } catch (error:any) {
+      console.error("signin error",error);
+      setError(error?.errors?.[0]?.message)
+      
+      
+    }finally{
+      setLoading(false);
+    }
+
+  }
   return (
     <View className="flex-1 items-center justify-center px-6 ">
       <Image
@@ -55,7 +80,7 @@ const SignInScreen = () => {
         }}
       />
       {error && <Text className="text-red-500 font-medium">{error}</Text>}
-      <Pressable className="bg-green-600 py-3 rounded-xl flex-row justify-center items-center w-full">
+      <Pressable onPress={onSignInPress} className="bg-green-600 py-3 rounded-xl flex-row justify-center items-center w-full">
         {loading ? (
           <ActivityIndicator size={"small"} color="#ffffff" className="mr-2" />
         ) : (
@@ -68,6 +93,7 @@ const SignInScreen = () => {
         <View className="flex-1 h-[1px] bg-gray-300"/>
       </View>
       {/* Google Sign In Component */}
+      <GoogleSignIn/>
     </View>
   );
 };
