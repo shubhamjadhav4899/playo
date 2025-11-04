@@ -11,7 +11,7 @@ export type PlyStackParamList ={
 const Stack = createNativeStackNavigator();
 const PlayStackNavigator = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator >
       <Stack.Screen name='PlayScreen' component={PlayScreen}/>
     </Stack.Navigator>
   )
