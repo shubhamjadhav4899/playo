@@ -1,4 +1,5 @@
 import {
+  Alert,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -20,6 +21,8 @@ import {
 } from "@expo/vector-icons";
 import moment from "moment";
 import Modal from "react-native-modal";
+import axios from "axios";
+import { useUser } from "@clerk/clerk-expo";
 
 const CreateActivityScreen = () => {
   const navigation = useNavigation();
@@ -29,7 +32,8 @@ const CreateActivityScreen = () => {
   const [timeInterval, setTimeInterval] = useState("");
   const [selected, setSelected] = useState("Public");
   const [noOfPlayers, setNoOfPlayers] = useState("");
-const [taggedVenue, setTaggedVenue] = useState(null);
+  const [taggedVenue, setTaggedVenue] = useState(null);
+  const { user } = useUser();
   const generateDates = () => {
     return Array.from({ length: 10 }).map((_, i) => {
       const date = moment().add(i, "days");
@@ -50,12 +54,51 @@ const [taggedVenue, setTaggedVenue] = useState(null);
   };
   const dates = generateDates();
 
-  const handleVenueSelected = (venue) =>{
+  const createGame = async () => {
+    try {
+      const response = await axios.post(
+        "http://10.0.2.2:3001/api/games/create",
+        {
+          sport,
+          area: taggedVenue?.name,
+          date,
+          time: timeInterval,
+          admin: user?.id,
+          totalPlayers: noOfPlayers,
+        }
+      );
+      if (response.status === 200) {
+        Alert.alert("Success", "Game Created Successfully",[
+          {
+            text:"Cancel",
+            onPress:()=>console.log("Cancel Pressed"),
+            style:"cancel"
+            
+          },
+          {
+            text:"OK",
+            onPress:()=>navigation.goBack()
+          }
+        ]);
+        setSport("");
+        setTaggedVenue(null);
+        setDate("");
+        setTimeInterval("");
+        setNoOfPlayers("");
+
+      }
+    } catch (error) {
+      console.log("Failed to create Game: ", error);
+      Alert.alert("Error", "Failed to create Game");
+    }
+  };
+
+  const handleVenueSelected = (venue) => {
     setTaggedVenue(venue);
-  }
-  const handleOnTimeSeleceted =(time)=>{
-    setTimeInterval(time)
-  }
+  };
+  const handleOnTimeSeleceted = (time) => {
+    setTimeInterval(time);
+  };
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="px-4">
@@ -80,7 +123,9 @@ const [taggedVenue, setTaggedVenue] = useState(null);
         <View className="border-b border-gray-300 my-4" />
         <Pressable
           onPress={() =>
-            navigation.navigate("TagVenue", { onVenueSelected: handleVenueSelected })
+            navigation.navigate("TagVenue", {
+              onVenueSelected: handleVenueSelected,
+            })
           }
           className="flex-row items-center gap-4"
         >
@@ -88,7 +133,7 @@ const [taggedVenue, setTaggedVenue] = useState(null);
           <View className="flex-1 ">
             <Text className="text-lg font-medium">Area</Text>
             <TextInput
-              value={taggedVenue?.name}
+              value={taggedVenue?.name || ''}
               editable={false}
               placeholder="Locality or Venue name"
               placeholderTextColor={"gray"}
@@ -116,7 +161,14 @@ const [taggedVenue, setTaggedVenue] = useState(null);
           <AntDesign name="arrowright" size={24} color="black" />
         </Pressable>
         <View className="border-b border-gray-300 my-4" />
-        <Pressable onPress={()=>navigation.navigate("SelectTime",{onTimeSelected:handleOnTimeSeleceted})} className="flex-row items-center gap-4">
+        <Pressable
+          onPress={() =>
+            navigation.navigate("SelectTime", {
+              onTimeSelected: handleOnTimeSeleceted,
+            })
+          }
+          className="flex-row items-center gap-4"
+        >
           <AntDesign name="clockcircleo" size={24} color="gray" />
           <View className="flex-1 ">
             <Text className="text-lg font-medium">Time</Text>
@@ -196,7 +248,10 @@ const [taggedVenue, setTaggedVenue] = useState(null);
             </View>
           ))}
         </View>
-        <Pressable className="bg-green-600 mt-8 py-3 rounded-md">
+        <Pressable
+          onPress={createGame}
+          className="bg-green-600 mt-8 py-3 rounded-md"
+        >
           <Text className="text-center text-white font-semibold text-base">
             Create Activity
           </Text>
