@@ -46,7 +46,7 @@ const TagVenueScreen = () => {
           <View className="flex-row gap-4">
             <Image className="w-[90px] h-[90px] rounded-md" source={{uri:item?.image}} />
             <View className="flex-1 justify-center space-y-1 pr-2">
-              <Text className="text-base font-semibold">{item?.name}</Text>
+              <Text className="text-base font-semibold" numberOfLines={1}>{item?.name}</Text>
               <Text className="text-gray-500">Near Lohegaon, Pune</Text>
               <Text className="font-medium text-sm text-gray-700">4.5 ( 129 Rating )</Text>
             </View>

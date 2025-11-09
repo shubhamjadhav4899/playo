@@ -16,7 +16,7 @@ const gameSchema = new mongoose.Schema({
       timeStamp: { type: Date },
     },
   ],
-  request: [
+  requests: [
     {
       userId: { type: String },
       comment: { type: String },
