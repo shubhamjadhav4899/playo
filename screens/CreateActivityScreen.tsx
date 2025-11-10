@@ -68,24 +68,22 @@ const CreateActivityScreen = () => {
         }
       );
       if (response.status === 200) {
-        Alert.alert("Success", "Game Created Successfully",[
+        Alert.alert("Success", "Game Created Successfully", [
           {
-            text:"Cancel",
-            onPress:()=>console.log("Cancel Pressed"),
-            style:"cancel"
-            
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel",
           },
           {
-            text:"OK",
-            onPress:()=>navigation.goBack()
-          }
+            text: "OK",
+            onPress: () => navigation.goBack(),
+          },
         ]);
         setSport("");
         setTaggedVenue(null);
         setDate("");
         setTimeInterval("");
         setNoOfPlayers("");
-
       }
     } catch (error) {
       console.log("Failed to create Game: ", error);
@@ -133,7 +131,7 @@ const CreateActivityScreen = () => {
           <View className="flex-1 ">
             <Text className="text-lg font-medium">Area</Text>
             <TextInput
-              value={taggedVenue?.name || ''}
+              value={taggedVenue?.name || ""}
               editable={false}
               placeholder="Locality or Venue name"
               placeholderTextColor={"gray"}
@@ -185,8 +183,9 @@ const CreateActivityScreen = () => {
         <View className="border-b border-gray-300 my-4" />
         <Text className="text-lg font-medium mt-4">Activity Access</Text>
         <View className="flex-row gap-4">
-          {["Public", "Invite Only"].map((type) => (
+          {["Public", "Invite Only"].map((type, idx) => (
             <Pressable
+              key={idx}
               onPress={() => setSelected(type)}
               className={`flex-row items-center justify-center gap-2 px-4 py-2 rounded-md w-36 mt-2 ${selected === type ? "bg-green-600" : "bg-white border border-gray-300"}`}
             >
@@ -272,8 +271,9 @@ const CreateActivityScreen = () => {
             Choose date/time to host
           </Text>
           <View className="flex-row flex-wrap gap-3 px-2">
-            {dates.map((date) => (
+            {dates.map((date, idx) => (
               <Pressable
+                key={idx}
                 onPress={() => {
                   setDate(date.actualDate);
                   setModalVisible(false);

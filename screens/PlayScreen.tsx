@@ -92,7 +92,7 @@ const PlayScreen = () => {
     }
     try {
       const response = await axios.get(endPoint, { params });
-      console.log("API RESPONSE", JSON.stringify(response.data, null, 2));
+      // console.log("API RESPONSE", JSON.stringify(response.data, null, 2));
       setGames(response.data);
     } catch (err) {
       console.error("Error", err);
