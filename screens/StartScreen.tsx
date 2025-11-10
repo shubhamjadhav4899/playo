@@ -90,17 +90,16 @@ const StartScreen = () => {
           const user = users[index % users.length];
           return (
             <Marker key={index} coordinate={point}>
-              <View className="h-[100px]">
+              <View className="h-[50px] w-[100px]">
                 <Image
                   source={{ uri: user?.image }}
-                  className=" w-[60px] h-[60px] rounded-full"
+                  className=" w-[30px] h-[30px] rounded-full"
                   resizeMode="cover"
                 />
                 
               
-                <View className="bg-white p-2 rounded-lg shadow-lg mt-2">
+               
                 <Text className="text-xs">{user?.description}</Text>
-              </View>
               </View>
              
             </Marker>

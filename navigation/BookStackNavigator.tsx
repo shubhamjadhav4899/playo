@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BookScreen from '../screens/BookScreen';
+import VenueInfoScreen from '../screens/VenueInfoScreen';
 
  export type BookStackParamList={
     BookHome:undefined;
@@ -25,8 +26,11 @@ import BookScreen from '../screens/BookScreen';
 const BookStackNavigator = () => {
  
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{
+      headerShown:false
+    }}>
       <Stack.Screen name='BookHome' component={BookScreen}/>
+      <Stack.Screen name='venueInfo' component={VenueInfoScreen}/>
     </Stack.Navigator>
   )
 }
