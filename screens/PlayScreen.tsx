@@ -81,9 +81,9 @@ const PlayScreen = () => {
 
     if (selectedCategory === "Calender") {
       endPoint = "http://10.0.2.2:3001/api/games/upcoming";
-      param: {
-        userId: user?.id;
-      }
+      params = {
+        userId: user?.id,
+      };
     } else if (selectedCategory === "Recommended") {
       setGames([]);
       setLoading(false);
@@ -274,15 +274,21 @@ const PlayScreen = () => {
       <ScrollView className="px-4 pt-3">
         {loading ? (
           <View className="flex-1 justify-center items-center mt-10">
-            <ActivityIndicator size={"large"} color="#1f2937"/>
+            <ActivityIndicator size={"large"} color="#1f2937" />
           </View>
         ) : displayGames.length == 0 ? (
           <View className="mt-10 justify-center items-center">
-            <Text className="text-gray-500 text-lg font-medium">no Games Available under {selectedCategory}</Text>
+            <Text className="text-gray-500 text-lg font-medium">
+              no Games Available under {selectedCategory}
+            </Text>
           </View>
         ) : (
           displayGames.map((game, idx) =>
-            selectedCategory == "Calender" ? <CalenderGameCard key={game._id} game={game} /> : <GameCard key={game._id} game={game} />
+            selectedCategory == "Calender" ? (
+              <CalenderGameCard key={game._id} game={game} />
+            ) : (
+              <GameCard key={game._id} game={game} />
+            )
           )
         )}
       </ScrollView>
