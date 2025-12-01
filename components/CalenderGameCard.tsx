@@ -35,6 +35,8 @@ const CalenderGameCard: React.FC<CalenderGameCardProp> = ({ game }) => {
   const { user } = useUser();
   const [loading, setLoading] = useState(false);
   const isPending = game.userRequestStatus === "pending";
+  console.log("game:",game);
+  
   return (
     <TouchableOpacity
     onPress={()=>navigation.navigate('GameSetup',{game})}

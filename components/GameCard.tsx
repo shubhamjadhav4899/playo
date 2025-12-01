@@ -38,7 +38,9 @@ const GameCard: React.FC<GameCardProps> = ({ game }) => {
   );
 
   return (
-    <TouchableOpacity className="my-2.5 p-3.5 bg-white rounded-lg border border-gray-200">
+    <TouchableOpacity onPress={()=>navigation.navigate("GameSetup",{
+      game,
+    })} className="my-2.5 p-3.5 bg-white rounded-lg border border-gray-200">
       <View className="flex-row justify-between items-center">
         <Text className="font-bold text-lg">Regular</Text>
         <Bookmark color="black" size={24} />

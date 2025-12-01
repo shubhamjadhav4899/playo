@@ -249,4 +249,115 @@ router.get("/games", async (req, res) => {
       .json({ message: "Failed to fetch games", error: err.message });
   }
 });
+
+router.get("/game/:gameId/players", async (req, res) => {
+  try {
+    const { gameId } = req.params;
+    const game = await Game.findById(gameId);
+    if (!game) {
+      return res.status(404).json({ message: "Game not found" });
+    }
+    const playerUsers = await User.find({ clerkId: { $in: game.players } });
+    const players = playerUsers.map((user) => ({
+      _id: user.clerkId,
+      imageUrl: user?.imageUrl,
+      name: `${user.firstName} ${user.lastName}`.trim(),
+    }));
+    res.status(200).json(players);
+  } catch (err) {
+    console.error("Errror Fetching players", err);
+    res
+      .status(500)
+      .json({ message: "Failed to fetch players", error: err.message });
+  }
+});
+
+router.post("/:gameId/request", async (req, res) => {
+  try {
+    const { gameId } = req.params;
+    const { userId, comment } = req.body;
+    console.log("user", userId);
+    if (!userId || !comment) {
+      return res.status(400).json({ message: "userId and comment required" });
+    }
+    const game = await Game.findById(gameId);
+    if (!game) {
+      return res.status(404).json({ message: "Game not found" });
+    }
+    const user = await User.findOne({ clerkId: userId });
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+    if (game.players.includes(userId)) {
+      return res.status(500).json({ message: "user already exists" });
+    }
+    if (game.requests.some((req) => req.userId == userId)) {
+      return res.status(400).json({ message: "req already send" });
+    }
+    game.requests.push({ userId, comment, status: "pending" });
+    await game.save();
+    res.status(200).json({ message: "Request send successfully" });
+  } catch (err) {
+    console.error("Error sending join request", err);
+    res.status(500).json({ error: "Failed to send request" });
+  }
+});
+
+route.post("/:gameId/cancel-request", async (req, res) => {
+  try {
+    const { gameId } = req.params;
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ message: "userId required" });
+    }
+    const game = Game.findById(gameId);
+    if (!game) {
+      return res.status(404).json({ message: "Game not found" });
+    }
+    const requestIndex = game.requests.findIndex((req) => req.userId == userId);
+    if (requestIndex === -1) {
+      return res
+        .status(400)
+        .josn({ message: "Np request found for this user" });
+    }
+    game.requests.splice(requestIndex, 1);
+    await game.save();
+
+    res.status(200).json({ message: "Request canceled successfully" });
+  } catch (err) {
+    console.error("Error canceling the req", err);
+    res.status(500).json({ error: "Failed to cancel req" });
+  }
+});
+router.post("/accept", async (req, res) => {
+  try {
+    const { gameId, userId, adminId } = req.body;
+    if (!gameId || !userId || !adminId) {
+      return res
+        .status(400)
+        .json({ message: "gameId,userId,adminId required" });
+    }
+    const game = Game.findById(gameId);
+    if (!game) {
+      return res.status(404).json({ message: "Game not found" });
+    }
+    if (game.admin !== adminId) {
+      return res.status(403).json({ message: "Only admin can accept req" });
+    }
+    const requestIndex = game.requests.findIndex((req) => req.userId == userId);
+    if (requestIndex === -1) {
+      return res.status(400).json({ message: "No req found for this user" });
+    }
+    game.requests.splice(requestIndex, 1);
+    if (!game.players.includes(userId)) {
+      game.players.push(userId);
+    }
+    await game.save();
+    res.status(200).json({ message: "Request accepted successfully" });
+  } catch (error) {
+    console.log("Error", err);
+    res.status(500).json({ message: "Failed to accept req" });
+  }
+});
 module.exports = router;

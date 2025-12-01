@@ -82,7 +82,7 @@ const PlayScreen = () => {
     if (selectedCategory === "Calender") {
       endPoint = "http://10.0.2.2:3001/api/games/upcoming";
       params = {
-        userId: user?.id,
+        userId: user?.id
       };
     } else if (selectedCategory === "Recommended") {
       setGames([]);
