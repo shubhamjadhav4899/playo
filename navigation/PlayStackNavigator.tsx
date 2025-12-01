@@ -5,6 +5,7 @@ import PlayScreen from '../screens/PlayScreen';
 import CreateActivityScreen from '../screens/CreateActivityScreen';
 import TagVenueScreen from '../screens/TagVenueScreen';
 import SelectedTimeScreen from '../screens/SelectedTimeScreen';
+import GameSetupScreen from '../screens/GameSetupScreen';
 
 export type PlyStackParamList ={
   PlayHome:undefined;
@@ -19,6 +20,7 @@ const PlayStackNavigator = () => {
       <Stack.Screen name='Create' component={CreateActivityScreen}/>
       <Stack.Screen name='TagVenue' component={TagVenueScreen}/>
       <Stack.Screen name='SelectTime' component={SelectedTimeScreen}/>
+      <Stack.Screen name='GameSetup' component={GameSetupScreen}/>
     </Stack.Navigator>
   )
 }
